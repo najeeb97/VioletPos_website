@@ -6,7 +6,6 @@
 
 @layer base {
   :root {
-    /* Editorial neutrals */
     --background: 40 20% 97%;
     --foreground: 240 10% 8%;
 
@@ -39,11 +38,9 @@
 
     --radius: 0;
 
-    /* Editorial typography */
     --font-serif: 'Fraunces', serif;
     --font-sans: 'Inter', sans-serif;
 
-    /* Cinematic gradients & shadows */
     --gradient-violet: radial-gradient(ellipse at center, hsl(265 100% 70% / 0.25), transparent 70%);
     --gradient-fade: linear-gradient(180deg, transparent, hsl(40 20% 97%));
     --shadow-glow: 0 0 120px hsl(265 100% 70% / 0.35);
@@ -64,21 +61,38 @@
   .dark {
     --background: 240 10% 6%;
     --foreground: 40 20% 97%;
+
     --card: 240 10% 6%;
     --card-foreground: 40 20% 97%;
+
     --popover: 240 10% 6%;
     --popover-foreground: 40 20% 97%;
+
     --primary: 40 20% 97%;
     --primary-foreground: 240 10% 6%;
+
     --secondary: 240 6% 12%;
     --secondary-foreground: 40 20% 97%;
+
     --muted: 240 6% 12%;
     --muted-foreground: 240 5% 60%;
+
     --accent: 265 85% 70%;
     --accent-foreground: 240 10% 6%;
+    --accent-soft: 265 40% 25%;
+    --accent-glow: 265 100% 78%;
+
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 40 20% 97%;
+
     --border: 240 6% 14%;
     --input: 240 6% 14%;
     --ring: 265 85% 70%;
+
+    --gradient-violet: radial-gradient(ellipse at center, hsl(265 100% 70% / 0.15), transparent 70%);
+    --gradient-fade: linear-gradient(180deg, transparent, hsl(240 10% 6%));
+    --shadow-glow: 0 0 120px hsl(265 100% 70% / 0.25);
+    --shadow-soft: 0 30px 80px -20px hsl(0 0% 0% / 0.4);
   }
 }
 
@@ -86,41 +100,69 @@
   * {
     @apply border-border;
   }
+
   html {
-    scroll-behavior: auto; /* was: smooth */
-  overflow: hidden;      /* add this — locks the page */
+    scroll-behavior: auto;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+    overflow: hidden;
     overflow-x: hidden;
     cursor: none;
   }
+
   a, button, [data-cursor] {
     cursor: none;
   }
+
   ::selection {
     background: hsl(var(--accent) / 0.25);
     color: hsl(var(--foreground));
   }
 }
 
+/* ─────────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1);    }
+  50%       { opacity: 0.65; transform: scale(1.06); }
+}
+
+/* ─────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────── */
 @layer utilities {
   .font-serif {
     font-family: var(--font-serif);
     font-optical-sizing: auto;
   }
+
   .font-sans {
     font-family: var(--font-sans);
   }
+
   .editorial-display {
     font-family: var(--font-serif);
     font-weight: 300;
     letter-spacing: -0.04em;
     line-height: 0.92;
   }
+
   .micro-label {
     font-family: var(--font-sans);
     font-size: 0.7rem;
@@ -128,12 +170,15 @@
     text-transform: uppercase;
     font-weight: 500;
   }
+
   .violet-glow {
     background: var(--gradient-violet);
   }
+
   .text-balance {
     text-wrap: balance;
   }
+
   .grain::before {
     content: "";
     position: absolute;
@@ -142,27 +187,48 @@
     opacity: 0.04;
     background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
+
   .magnetic {
     display: inline-block;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
   .clip-reveal {
     clip-path: inset(0 100% 0 0);
-    transition: clip-path 1s cubic-bezier(0.16,1,0.3,1);
+    transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
   .clip-reveal.in-view {
     clip-path: inset(0 0% 0 0);
   }
 
-  /* Hide scrollbar (clean look) */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  /* Marquee — needs display:flex + width:max-content
+     alongside the Tailwind keyframe animation          */
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+    display: flex;
+    width: max-content;
+  }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  .animate-marquee-reverse {
+    animation: marquee-reverse 50s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+
+  /* Glow pulse */
+  .animate-glow-pulse {
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+
+  /* Scrollbar hide */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
   /* Scroll progress bar */
   .scroll-progress {

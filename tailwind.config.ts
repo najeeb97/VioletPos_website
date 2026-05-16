@@ -3,7 +3,12 @@ import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -14,6 +19,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        "3xl": "1800px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -39,6 +47,8 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          soft: "hsl(var(--accent-soft))",
+          glow: "hsl(var(--accent-glow))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -60,60 +70,65 @@ export default {
         },
       },
       borderRadius: {
+        DEFAULT: "var(--radius)",
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
       },
       fontFamily: {
         serif: ["Fraunces", "serif"],
         sans: ["Inter", "sans-serif"],
       },
       keyframes: {
-        "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
-        "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "0%":   { opacity: "0", transform: "translateY(40px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "glow-pulse": {
-          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
-          "50%": { opacity: "0.7", transform: "scale(1.05)" },
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)"    },
+          "50%":      { opacity: "0.7", transform: "scale(1.05)" },
         },
         "marquee": {
-          "0%": { transform: "translateX(0)" },
+          "0%":   { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "marquee-reverse": {
+          "0%":   { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
         "float": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-12px)" },
+          "0%, 100%": { transform: "translateY(0px)"  },
+          "50%":      { transform: "translateY(-12px)" },
         },
         "shimmer": {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
+          "0%":   { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0"  },
         },
         "scale-in": {
-          "0%": { opacity: "0", transform: "scale(0.92)" },
-          "100%": { opacity: "1", transform: "scale(1)" },
+          "0%":   { opacity: "0", transform: "scale(0.92)" },
+          "100%": { opacity: "1", transform: "scale(1)"    },
         },
-        "marquee-reverse": {
-  "0%": { transform: "translateX(-50%)" },
-  "100%": { transform: "translateX(0)" },
-},
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 1s cubic-bezier(0.16,1,0.3,1) forwards",
-        "glow-pulse": "glow-pulse 6s ease-in-out infinite",
-        "marquee": "marquee 40s linear infinite",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 3s linear infinite",
-        "scale-in": "scale-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards",
+        "accordion-down":  "accordion-down 0.2s ease-out",
+        "accordion-up":    "accordion-up 0.2s ease-out",
+        "fade-up":         "fade-up 1s cubic-bezier(0.16,1,0.3,1) forwards",
+        "glow-pulse":      "glow-pulse 6s ease-in-out infinite",
+        "marquee":         "marquee 40s linear infinite",
         "marquee-reverse": "marquee-reverse 50s linear infinite",
+        "float":           "float 6s ease-in-out infinite",
+        "shimmer":         "shimmer 3s linear infinite",
+        "scale-in":        "scale-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards",
       },
-      
     },
   },
   plugins: [animate],
-  
 } satisfies Config;
