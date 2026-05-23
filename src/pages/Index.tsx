@@ -471,7 +471,7 @@ const Opening = ({ isActive }: { isActive: boolean }) => {
       <div className="relative z-10 max-w-[1400px]">
         <h1 className="editorial-display text-[13vw] md:text-[9.5vw] leading-[0.9] tracking-tight text-balance">
           <RevealText
-            text="Not Just Another POS System!"
+            text="Not Just Another POS System."
             isActive={isActive}
             delay={0.3}
           />
