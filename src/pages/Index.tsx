@@ -471,7 +471,7 @@ const Opening = ({ isActive }: { isActive: boolean }) => {
       <div className="relative z-10 max-w-[1400px]">
         <h1 className="editorial-display text-[13vw] md:text-[9.5vw] leading-[0.9] tracking-tight text-balance">
           <RevealText
-            text="Not Just Another POS System."
+            text="Not Just Another POS System"
             isActive={isActive}
             delay={0.3}
           />
@@ -482,7 +482,7 @@ const Opening = ({ isActive }: { isActive: boolean }) => {
           transition={{ duration: 1, delay: 1.6, ease: EASE }}
           className="mt-10 md:mt-16 editorial-display text-[7vw] md:text-[4.5vw] text-[hsl(var(--accent))]"
         >
-          It's a better way to sell.
+          It's a better way to sell
         </motion.p>
       </div>
 
