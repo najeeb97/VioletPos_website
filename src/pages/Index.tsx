@@ -632,7 +632,7 @@ const RealityBreak = ({ isActive }: { isActive: boolean }) => {
         className="relative z-20 font-sans text-sm md:text-[15px] text-muted-foreground
           max-w-lg leading-[1.9]"
       >
-        <span className="text-foreground font-medium">VioletPOS</span> gives you one
+        <span className="text-foreground font-medium">VioletPos</span> gives you one
         unified surface —{" "}
         <span className="text-foreground font-medium">
           customers, suppliers and products
@@ -1148,7 +1148,7 @@ const VideoSection = ({ isActive }: { isActive: boolean }) => (
         </div>
         <div className="absolute bottom-6 left-6">
           <p className="font-serif italic text-base text-white/50">
-            Watch VioletPOS in action
+            Watch VioletPos in action
           </p>
         </div>
       </motion.div>
@@ -1164,7 +1164,7 @@ const Flexibility = ({ isActive }: { isActive: boolean }) => {
   const [mode, setMode] = useState<"standalone" | "cloud">("standalone");
 
   const steps = [
-    { num: "01", label: "Download",  desc: "Get VioletPOS installer for Windows or Mac" },
+    { num: "01", label: "Download",  desc: "Get VioletPos installer for Windows or Mac" },
     { num: "02", label: "Install",   desc: "One-click local setup, no server needed"    },
     { num: "03", label: "Trial",     desc: "Activate your full 20-day free trial"       },
     { num: "04", label: "Subscribe", desc: "Monthly or yearly — cancel anytime"         },
@@ -1494,7 +1494,7 @@ const FinalCTA = ({ isActive }: { isActive: boolean }) => {
 
       {/* Footer */}
       <div className="absolute bottom-8 left-0 right-0 px-6 md:px-12 flex justify-between items-end micro-label opacity-25 text-[hsl(var(--background))]">
-        <span>VioletPOS — © 2026</span>
+        <span>VioletPos — © 2026</span>
         <span className="hidden md:block">Designed for those who decide.</span>
         <span>Edition Nº1</span>
       </div>
