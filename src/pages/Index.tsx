@@ -34,6 +34,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { TargetAndTransition } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 /* ─────────────────────────────────────────────
    SCROLL CONTEXT
@@ -43,6 +50,14 @@ const ScrollCtx = createContext<{
   total: number;
   goTo: (i: number) => void;
 }>({ active: 0, total: 0, goTo: () => {} });
+
+/* ─────────────────────────────────────────────
+   LANGUAGE CONTEXT
+───────────────────────────────────────────── */
+const LanguageCtx = createContext<{
+  language: Language;
+  setLanguage: (lang: Language) => void;
+}>({ language: "en", setLanguage: () => {} });
 
 /* ─────────────────────────────────────────────
    CONSTANTS
@@ -97,6 +112,100 @@ const sectionVariants = [
   "clipUp",     // 9 Trust
   "fadeScale",  // 10 FinalCTA
 ];
+
+/* ─────────────────────────────────────────────
+   TRANSLATIONS
+───────────────────────────────────────────── */
+type Language = "en" | "ar" | "hi";
+
+const translations: Record<Language, {
+  getting_started_label: string;
+  getting_started_title: string;
+  getting_started_subtitle: string;
+  steps: Array<{ title: string; description: string }>;
+}> = {
+  en: {
+    getting_started_label: "(05) — Getting Started",
+    getting_started_title: "From installation to first sale in 5 steps.",
+    getting_started_subtitle: "Set up your POS system in just a few minutes and start accepting sales immediately.",
+    steps: [
+      {
+        title: "Download & Install",
+        description: "Download the POS application and install it in minutes. Quick setup wizard gets you started fast.",
+      },
+      {
+        title: "Login or Create Account",
+        description: "Sign up or log in securely to access your dashboard and cloud sync features.",
+      },
+      {
+        title: "Setup Your Business",
+        description: "Add company details, GST settings, bank details, and invoice preferences.",
+      },
+      {
+        title: "Add Products & Customers",
+        description: "Create your inventory, customers, and suppliers easily. Bulk import available.",
+      },
+      {
+        title: "Start Selling",
+        description: "Generate invoices, manage sales, print bills, and run your business smoothly.",
+      },
+    ],
+  },
+  ar: {
+    getting_started_label: "(05) — ابدأ الآن",
+    getting_started_title: "من التثبيت إلى أول عملية بيع في 5 خطوات.",
+    getting_started_subtitle: "قم بإعداد نظام نقاط البيع الخاص بك في دقائق قليلة وابدأ قبول المبيعات على الفور.",
+    steps: [
+      {
+        title: "التحميل والتثبيت",
+        description: "قم بتحميل تطبيق نقاط البيع وتثبيته في دقائق. يساعدك معالج الإعداد السريع على البدء بسرعة.",
+      },
+      {
+        title: "تسجيل الدخول أو إنشاء حساب",
+        description: "قم بالتسجيل أو تسجيل الدخول بشكل آمن للوصول إلى لوحة المعلومات والمزامنة السحابية.",
+      },
+      {
+        title: "إعداد عملك",
+        description: "أضف تفاصيل الشركة وإعدادات ضريبة القيمة المضافة وتفاصيل البنك وتفضيلات الفاتورة.",
+      },
+      {
+        title: "إضافة المنتجات والعملاء",
+        description: "قم بإنشاء المخزون والعملاء والموردين بسهولة. الاستيراد الجماعي متاح.",
+      },
+      {
+        title: "ابدأ البيع",
+        description: "قم بإنشاء الفواتير وإدارة المبيعات وطباعة الفواتير وتشغيل عملك بسلاسة.",
+      },
+    ],
+  },
+  hi: {
+    getting_started_label: "(05) — शुरुआत करें",
+    getting_started_title: "5 चरणों में स्थापना से पहली बिक्री तक।",
+    getting_started_subtitle: "अपने POS सिस्टम को कुछ ही मिनटों में सेट करें और तुरंत बिक्री स्वीकार करना शुरू करें।",
+    steps: [
+      {
+        title: "डाउनलोड और इंस्टॉल करें",
+        description: "POS एप्लिकेशन को डाउनलोड करें और इसे मिनटों में इंस्टॉल करें। त्वरित सेटअप विज़ार्ड आपको जल्दी शुरू करने में मदद करता है।",
+      },
+      {
+        title: "लॉगिन करें या खाता बनाएं",
+        description: "अपने डैशबोर्ड और क्लाउड सिंक सुविधाओं तक पहुंचने के लिए सुरक्षित रूप से साइन अप या लॉगिन करें।",
+      },
+      {
+        title: "अपना व्यवसाय सेट करें",
+        description: "कंपनी का विवरण, GST सेटिंग्स, बैंक विवरण और चालान वरीयताएं जोड़ें।",
+      },
+      {
+        title: "उत्पाद और ग्राहक जोड़ें",
+        description: "आसानी से अपनी इन्वेंटरी, ग्राहक और आपूर्तिकर्ता बनाएं। बल्क आयात उपलब्ध है।",
+      },
+      {
+        title: "बिक्री शुरू करें",
+        description: "चालान बनाएं, बिक्री प्रबंधित करें, बिल प्रिंट करें और अपना व्यवसाय आसानी से चलाएं।",
+      },
+    ],
+  },
+};
 
 const sectionLabels = [
   "Opening", "Reality", "Story", "Product",
@@ -430,25 +539,270 @@ const Section = ({
 /* ─────────────────────────────────────────────
    SECTION 0 — OPENING
 ───────────────────────────────────────────── */
+const heroLayers = [
+  { x: -90, y: -110, z: -240, size: 720, rotate: -12, color: "286 100% 76%", opacity: 0.32, depth: 0.72, delay: "0s" },
+  { x: -100, y: -55, z: -76, size: 420, rotate: 16, color: "268 100% 78%", opacity: 0.28, depth: 0.52, delay: "0.2s" },
+  { x: 90, y: -30, z: -24, size: 320, rotate: -22, color: "264 100% 84%", opacity: 0.26, depth: 0.34, delay: "0.8s" },
+  { x: 55, y: 90, z: -12, size: 260, rotate: 18, color: "226 90% 78%", opacity: 0.3, depth: 0.18, delay: "1.4s" },
+  { x: -42, y: 74, z: -118, size: 240, rotate: 42, color: "296 100% 74%", opacity: 0.22, depth: 0.68, delay: "0.4s" },
+];
+
+const heroDetails = [
+  { left: "28%", top: "22%", width: 132, height: 88, rotate: -10, depth: 0.26, accent: "hsla(268, 100%, 82%, 0.9)" },
+  { left: "72%", top: "24%", width: 136, height: 80, rotate: 12, depth: 0.18, accent: "hsla(286, 100%, 84%, 0.9)" },
+  { left: "23%", top: "70%", width: 96, height: 60, rotate: 8, depth: 0.15, accent: "hsla(215, 100%, 80%, 0.9)" },
+  { left: "68%", top: "76%", width: 108, height: 72, rotate: -16, depth: 0.2, accent: "hsla(295, 100%, 76%, 0.9)" },
+];
+
+const HeroBackground = ({ pointer }: { pointer: { x: number; y: number } }) => (
+  <div className="hero-3d-scene absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      className="hero-3d-halo"
+      style={{ transform: `translate3d(${pointer.x * 140}px, ${pointer.y * 108}px, 0)` }}
+    />
+    <div
+      className="hero-3d-ring"
+      style={{ transform: `translate3d(${pointer.x * 92}px, ${pointer.y * 72}px, 0)` }}
+    />
+    <div
+      className="hero-3d-core"
+      style={{
+        transform: `perspective(1400px) rotateX(${10 + pointer.y * 32}deg) rotateY(${pointer.x * 34}deg) translate3d(${pointer.x * 128}px, ${pointer.y * 98}px, -24px) scale(${1 + pointer.y * 0.31})`,
+      }}
+    />
+    <div className="hero-3d-grid" />
+    {heroLayers.map((layer, index) => (
+      <div
+        key={index}
+        className="hero-3d-layer"
+        style={{
+          width: `${layer.size}px`,
+          height: `${layer.size}px`,
+          left: `calc(50% + ${layer.x}px)`,
+          top: `calc(50% + ${layer.y}px)`,
+          transform: `translate3d(calc(-50% + ${pointer.x * layer.depth * 520}px), calc(-50% + ${pointer.y * layer.depth * 520}px), ${layer.z + pointer.y * 18}px) rotate(${layer.rotate + pointer.x * 10}deg) rotateX(${pointer.y * 18}deg) rotateY(${pointer.x * 10}deg) scale(${1 + pointer.y * 0.42 * layer.depth})`,
+          opacity: layer.opacity,
+          animationDelay: layer.delay,
+        }}
+      >
+        <div
+          className="hero-3d-card"
+          style={{
+            background: `radial-gradient(circle at 30% 30%, hsla(${layer.color}, 0.35), transparent 55%)`,
+            borderColor: `hsla(${layer.color}, 0.28)`,
+            boxShadow: `0 48px 120px -58px hsla(${layer.color}, 0.28)`,
+          }}
+        />
+      </div>
+    ))}
+
+    {heroDetails.map((detail, index) => (
+      <div
+        key={index}
+        className="hero-3d-detail"
+        style={{
+          left: detail.left,
+          top: detail.top,
+          width: `${detail.width}px`,
+          height: `${detail.height}px`,
+          transform: `translate3d(calc(-50% + ${pointer.x * detail.depth * 420}px), calc(-50% + ${pointer.y * detail.depth * 420}px), 0) rotate(${detail.rotate + pointer.x * 8}deg) rotateX(${pointer.y * 14}deg) scale(${1 + pointer.y * 0.3})`,
+        }}
+      >
+        <div
+          className="hero-3d-detail-card"
+          style={{ borderColor: detail.accent, boxShadow: `0 20px 50px -18px ${detail.accent}` }}
+        >
+          <div className="hero-3d-detail-header" />
+          <div className="hero-3d-detail-lines">
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+const RealityParticles = ({ isActive }: { isActive: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (!isActive) {
+      setPointer({ x: 0, y: 0 });
+      return;
+    }
+
+    const handleMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const r = containerRef.current.getBoundingClientRect();
+      const xPct = (e.clientX - r.left) / r.width;
+      const yPct = (e.clientY - r.top) / r.height;
+      setPointer({ x: (xPct - 0.5) * 2.4, y: (yPct - 0.5) * 2.4 });
+    };
+
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [isActive]);
+
+  const dots = [
+    { left: "16%", top: "18%", size: 92, x: -1.2, y: 1.1, color: "hsla(273, 100%, 80%, 0.62)" },
+    { left: "74%", top: "12%", size: 108, x: 1.8, y: -1.4, color: "hsla(300, 100%, 85%, 0.54)" },
+    { left: "42%", top: "72%", size: 112, x: -1.6, y: 1.7, color: "hsla(245, 88%, 86%, 0.5)" },
+  ];
+
+  return (
+    <div
+      ref={containerRef}
+      className="section-3d-scene absolute inset-0 overflow-hidden"
+      style={{ opacity: isActive ? 1 : 0, transition: "opacity 0.4s ease" }}
+    >
+      <div
+        className="section-3d-glow"
+        style={{ transform: `translate3d(${pointer.x * 48}px, ${pointer.y * 42}px, 0)` }}
+      />
+      <div
+        className="section-3d-ring-soft"
+        style={{ transform: `translate3d(${pointer.x * 82}px, ${pointer.y * 56}px, 0)` }}
+      />
+      <div
+        className="section-3d-grid-soft"
+        style={{ transform: `translate3d(${pointer.x * -26}px, ${pointer.y * -18}px, 0)` }}
+      />
+      {dots.map((dot, index) => (
+        <div
+          key={index}
+          className="section-3d-dot"
+          style={{
+            left: dot.left,
+            top: dot.top,
+            width: `${dot.size}px`,
+            height: `${dot.size}px`,
+            background: `radial-gradient(circle, ${dot.color}, transparent 58%)`,
+            transform: `translate3d(${pointer.x * dot.x}px, ${pointer.y * dot.y}px, 0)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Opening = ({ isActive }: { isActive: boolean }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const pointerTargetRef = useRef({ x: 0, y: 0 });
+  const pointerCurrentRef = useRef({ x: 0, y: 0 });
+  const idleTimerRef = useRef<number | null>(null);
+  const idleAnimRef = useRef<number | null>(null);
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [idlePointer, setIdlePointer] = useState({ x: 0, y: 0 });
+  const [isIdle, setIsIdle] = useState(true);
+  const isIdleRef = useRef(true);
+  const frameRef = useRef<number | null>(null);
 
-  const onMouse = useCallback((e: React.MouseEvent) => {
-    if (!glowRef.current || !containerRef.current) return;
-    const r = containerRef.current.getBoundingClientRect();
-    const xPct = (e.clientX - r.left) / r.width;
-    const yPct = (e.clientY - r.top) / r.height;
-    glowRef.current.style.left = `${xPct * 100}%`;
-    glowRef.current.style.top = `${yPct * 100}%`;
+  const startPointerLoop = useCallback(() => {
+    if (frameRef.current !== null) return;
+
+    const tick = () => {
+      const target = pointerTargetRef.current;
+      const current = pointerCurrentRef.current;
+      const nextX = current.x + (target.x - current.x) * 0.14;
+      const nextY = current.y + (target.y - current.y) * 0.14;
+      pointerCurrentRef.current = { x: nextX, y: nextY };
+      setPointer(pointerCurrentRef.current);
+
+      if (
+        Math.abs(nextX - target.x) > 0.001 ||
+        Math.abs(nextY - target.y) > 0.001 ||
+        isIdleRef.current
+      ) {
+        frameRef.current = window.requestAnimationFrame(tick);
+      } else {
+        frameRef.current = null;
+      }
+    };
+
+    frameRef.current = window.requestAnimationFrame(tick);
   }, []);
+
+  const onMouse = useCallback(
+    (e: React.MouseEvent) => {
+      if (!glowRef.current || !containerRef.current) return;
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      setIsIdle(false);
+      if (idleAnimRef.current) {
+        window.cancelAnimationFrame(idleAnimRef.current);
+        idleAnimRef.current = null;
+      }
+
+      const r = containerRef.current.getBoundingClientRect();
+      const xPct = (e.clientX - r.left) / r.width;
+      const yPct = (e.clientY - r.top) / r.height;
+      glowRef.current.style.left = `${xPct * 100}%`;
+      glowRef.current.style.top = `${yPct * 100}%`;
+      pointerTargetRef.current = {
+        x: (xPct - 0.5) * 4.3,
+        y: (yPct - 0.5) * 4.3,
+      };
+      startPointerLoop();
+      idleTimerRef.current = window.setTimeout(() => setIsIdle(true), 1400);
+    },
+    [startPointerLoop]
+  );
+
+  const onLeave = useCallback(() => {
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = window.setTimeout(() => setIsIdle(true), 1400);
+  }, []);
+
+  useEffect(() => {
+    isIdleRef.current = isIdle;
+  }, [isIdle]);
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      if (idleAnimRef.current) window.cancelAnimationFrame(idleAnimRef.current);
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isIdle) {
+      if (idleAnimRef.current) {
+        window.cancelAnimationFrame(idleAnimRef.current);
+        idleAnimRef.current = null;
+      }
+      setIdlePointer({ x: 0, y: 0 });
+      return;
+    }
+
+    let start = performance.now();
+    const animateIdle = (time: number) => {
+      const t = (time - start) / 1200;
+      const x = Math.sin(t * 1.1) * 0.08;
+      const y = Math.cos(t * 0.9) * 0.06;
+      setIdlePointer({ x, y });
+      idleAnimRef.current = window.requestAnimationFrame(animateIdle);
+    };
+
+    idleAnimRef.current = window.requestAnimationFrame(animateIdle);
+    return () => {
+      if (idleAnimRef.current) window.cancelAnimationFrame(idleAnimRef.current);
+      idleAnimRef.current = null;
+    };
+  }, [isIdle]);
 
   return (
     <div
       ref={containerRef}
       className="relative h-full flex flex-col justify-between px-6 md:px-12 py-28 overflow-hidden grain"
+      style={{ perspective: 1400, perspectiveOrigin: "50% 50%" }}
       onMouseMove={onMouse}
+      onMouseLeave={onLeave}
     >
+      <HeroBackground pointer={{ x: pointer.x + (isIdle ? idlePointer.x : 0), y: pointer.y + (isIdle ? idlePointer.y : 0) }} />
       {/* Mouse-tracked glow */}
       <div
         ref={glowRef}
@@ -533,6 +887,7 @@ const RealityBreak = ({ isActive }: { isActive: boolean }) => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center px-8 md:px-28 text-center overflow-hidden relative">
+      <RealityParticles isActive={isActive} />
       {/* Ambient glow */}
       <div className="absolute inset-0 violet-glow opacity-15 pointer-events-none" />
 
@@ -663,7 +1018,139 @@ const RealityBreak = ({ isActive }: { isActive: boolean }) => {
 /* ─────────────────────────────────────────────
    SECTION 2 — NARRATIVE
 ───────────────────────────────────────────── */
+const NarrativeDepth = ({ pointer }: { pointer: { x: number; y: number } }) => {
+  const nodes = [
+    { left: "16%", top: "18%", size: 90, depth: 0.22, hue: 278, rotate: -16 },
+    { left: "72%", top: "24%", size: 110, depth: 0.18, hue: 292, rotate: 20 },
+    { left: "24%", top: "70%", size: 72, depth: 0.14, hue: 232, rotate: 8 },
+  ];
+
+  return (
+    <div className="narrative-3d-scene absolute inset-0 pointer-events-none overflow-hidden">
+      <div
+        className="narrative-3d-grid"
+        style={{ transform: `translate3d(${pointer.x * 24}px, ${pointer.y * 18}px, 0)` }}
+      />
+      <div
+        className="narrative-3d-ring"
+        style={{ transform: `translate3d(${pointer.x * 38}px, ${pointer.y * 30}px, 0) rotate(${pointer.x * 4}deg)` }}
+      />
+      {nodes.map((node, index) => (
+        <div
+          key={index}
+          className="narrative-3d-blob"
+          style={{
+            left: node.left,
+            top: node.top,
+            width: `${node.size}px`,
+            height: `${node.size}px`,
+            transform: `translate3d(${pointer.x * node.depth * 72}px, ${pointer.y * node.depth * 72}px, 0) rotate(${node.rotate + pointer.x * 8}deg)`,
+            background: `radial-gradient(circle at 30% 30%, hsla(${node.hue}, 100%, 82%, 0.65), transparent 52%)`,
+            borderColor: `hsla(${node.hue}, 100%, 82%, 0.32)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Narrative = ({ isActive }: { isActive: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pointerTargetRef = useRef({ x: 0, y: 0 });
+  const pointerCurrentRef = useRef({ x: 0, y: 0 });
+  const isIdleRef = useRef(true);
+  const idleTimerRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [isIdle, setIsIdle] = useState(true);
+
+  const startPointerLoop = useCallback(() => {
+    if (frameRef.current !== null) return;
+
+    const tick = () => {
+      const target = isIdleRef.current ? { x: 0, y: 0 } : pointerTargetRef.current;
+      const current = pointerCurrentRef.current;
+      const speed = isIdleRef.current ? 0.08 : 0.26;
+      const nextX = current.x + (target.x - current.x) * speed;
+      const nextY = current.y + (target.y - current.y) * speed;
+      pointerCurrentRef.current = { x: nextX, y: nextY };
+      setPointer(pointerCurrentRef.current);
+
+      if (
+        Math.abs(nextX - target.x) > 0.001 ||
+        Math.abs(nextY - target.y) > 0.001 ||
+        !isIdleRef.current
+      ) {
+        frameRef.current = window.requestAnimationFrame(tick);
+      } else {
+        frameRef.current = null;
+      }
+    };
+
+    frameRef.current = window.requestAnimationFrame(tick);
+  }, []);
+
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = window.setTimeout(() => {
+      setIsIdle(true);
+      isIdleRef.current = true;
+      pointerTargetRef.current = { x: 0, y: 0 };
+      startPointerLoop();
+    }, 1200);
+  }, [startPointerLoop]);
+
+  const onPointerMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!containerRef.current) return;
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      setIsIdle(false);
+      isIdleRef.current = false;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const xPct = (e.clientX - rect.left) / rect.width;
+      const yPct = (e.clientY - rect.top) / rect.height;
+      pointerTargetRef.current = {
+        x: (xPct - 0.5) * 3.0,
+        y: (yPct - 0.5) * 3.0,
+      };
+      startPointerLoop();
+      resetIdleTimer();
+    },
+    [resetIdleTimer, startPointerLoop]
+  );
+
+  const onLeave = useCallback(() => {
+    resetIdleTimer();
+  }, [resetIdleTimer]);
+
+  const onWheel = useCallback(() => {
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    setIsIdle(false);
+    isIdleRef.current = false;
+    startPointerLoop();
+    resetIdleTimer();
+  }, [resetIdleTimer, startPointerLoop]);
+
+  useEffect(() => {
+    if (!isActive) {
+      setPointer({ x: 0, y: 0 });
+      pointerTargetRef.current = { x: 0, y: 0 };
+      pointerCurrentRef.current = { x: 0, y: 0 };
+      setIsIdle(true);
+      isIdleRef.current = true;
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      return;
+    }
+
+    return () => {
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+    };
+  }, [isActive]);
+
   const lines = [
     { text: "Your business is not spreadsheets.", align: "left" as const,   dx: -60 },
     { text: "It's people. Products. Decisions.",  align: "right" as const,  dx: 60  },
@@ -671,7 +1158,14 @@ const Narrative = ({ isActive }: { isActive: boolean }) => {
   ];
 
   return (
-    <div className="h-full flex flex-col justify-center px-6 md:px-12 py-24 overflow-hidden">
+    <div
+      ref={containerRef}
+      onMouseMove={onPointerMove}
+      onMouseLeave={onLeave}
+      onWheel={onWheel}
+      className="h-full flex flex-col justify-center px-6 md:px-12 py-24 overflow-hidden relative"
+    >
+      <NarrativeDepth pointer={pointer} />
       <motion.p
         initial={{ opacity: 0 }}
         animate={isActive ? { opacity: 0.45 } : { opacity: 0 }}
@@ -714,7 +1208,139 @@ const Narrative = ({ isActive }: { isActive: boolean }) => {
 /* ─────────────────────────────────────────────
    SECTION 3 — PRODUCT REVEAL
 ───────────────────────────────────────────── */
+const ProductRevealDepth = ({ pointer }: { pointer: { x: number; y: number } }) => {
+  const panels = [
+    { left: "14%", top: "18%", width: 184, height: 130, depth: 0.22, rotate: -10, hue: 280 },
+    { left: "76%", top: "14%", width: 156, height: 116, depth: 0.18, rotate: 12, hue: 256 },
+    { left: "52%", top: "68%", width: 140, height: 94, depth: 0.14, rotate: -6, hue: 236 },
+  ];
+
+  return (
+    <div className="product-3d-scene absolute inset-0 pointer-events-none overflow-hidden">
+      <div
+        className="product-3d-halo"
+        style={{ transform: `translate3d(${pointer.x * 48}px, ${pointer.y * 34}px, 0)` }}
+      />
+      <div
+        className="product-3d-grid"
+        style={{ transform: `translate3d(${pointer.x * -18}px, ${pointer.y * -14}px, 0)` }}
+      />
+      {panels.map((panel, index) => (
+        <div
+          key={index}
+          className="product-3d-panel"
+          style={{
+            left: panel.left,
+            top: panel.top,
+            width: `${panel.width}px`,
+            height: `${panel.height}px`,
+            transform: `translate3d(${pointer.x * panel.depth * 96}px, ${pointer.y * panel.depth * 96}px, 0) rotate(${panel.rotate + pointer.x * 6}deg) rotateX(${pointer.y * 8}deg)`,
+            background: `linear-gradient(135deg, hsla(${panel.hue}, 100%, 80%, 0.28), hsla(${panel.hue}, 100%, 84%, 0.14))`,
+            borderColor: `hsla(${panel.hue}, 100%, 82%, 0.24)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const ProductReveal = ({ isActive }: { isActive: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pointerTargetRef = useRef({ x: 0, y: 0 });
+  const pointerCurrentRef = useRef({ x: 0, y: 0 });
+  const isIdleRef = useRef(true);
+  const idleTimerRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [isIdle, setIsIdle] = useState(true);
+
+  const startPointerLoop = useCallback(() => {
+    if (frameRef.current !== null) return;
+
+    const tick = () => {
+      const target = isIdleRef.current ? { x: 0, y: 0 } : pointerTargetRef.current;
+      const current = pointerCurrentRef.current;
+      const speed = isIdleRef.current ? 0.08 : 0.24;
+      const nextX = current.x + (target.x - current.x) * speed;
+      const nextY = current.y + (target.y - current.y) * speed;
+      pointerCurrentRef.current = { x: nextX, y: nextY };
+      setPointer(pointerCurrentRef.current);
+
+      if (
+        Math.abs(nextX - target.x) > 0.001 ||
+        Math.abs(nextY - target.y) > 0.001 ||
+        !isIdleRef.current
+      ) {
+        frameRef.current = window.requestAnimationFrame(tick);
+      } else {
+        frameRef.current = null;
+      }
+    };
+
+    frameRef.current = window.requestAnimationFrame(tick);
+  }, []);
+
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = window.setTimeout(() => {
+      setIsIdle(true);
+      isIdleRef.current = true;
+      pointerTargetRef.current = { x: 0, y: 0 };
+      startPointerLoop();
+    }, 1200);
+  }, [startPointerLoop]);
+
+  const onPointerMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!containerRef.current) return;
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      setIsIdle(false);
+      isIdleRef.current = false;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const xPct = (e.clientX - rect.left) / rect.width;
+      const yPct = (e.clientY - rect.top) / rect.height;
+      pointerTargetRef.current = {
+        x: (xPct - 0.5) * 2.8,
+        y: (yPct - 0.5) * 2.8,
+      };
+      startPointerLoop();
+      resetIdleTimer();
+    },
+    [resetIdleTimer, startPointerLoop]
+  );
+
+  const onLeave = useCallback(() => {
+    resetIdleTimer();
+  }, [resetIdleTimer]);
+
+  const onWheel = useCallback(() => {
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    setIsIdle(false);
+    isIdleRef.current = false;
+    startPointerLoop();
+    resetIdleTimer();
+  }, [resetIdleTimer, startPointerLoop]);
+
+  useEffect(() => {
+    if (!isActive) {
+      setPointer({ x: 0, y: 0 });
+      pointerTargetRef.current = { x: 0, y: 0 };
+      pointerCurrentRef.current = { x: 0, y: 0 };
+      setIsIdle(true);
+      isIdleRef.current = true;
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      return;
+    }
+
+    return () => {
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+    };
+  }, [isActive]);
+
   const features = [
     "Customer, Supplier & Product Management",
     "Unlimited Reviews per Entity",
@@ -727,7 +1353,14 @@ const ProductReveal = ({ isActive }: { isActive: boolean }) => {
   ];
 
   return (
-    <div className="h-full flex items-center px-6 md:px-12 overflow-hidden">
+    <div
+      ref={containerRef}
+      onMouseMove={onPointerMove}
+      onMouseLeave={onLeave}
+      onWheel={onWheel}
+      className="h-full flex items-center px-6 md:px-12 overflow-hidden relative"
+    >
+      <ProductRevealDepth pointer={pointer} />
       <div className="absolute inset-0 violet-glow opacity-25 pointer-events-none" />
       <div className="relative max-w-[1500px] mx-auto w-full">
         <motion.p
@@ -866,67 +1499,190 @@ const Capability = ({ isActive }: { isActive: boolean }) => {
 /* ─────────────────────────────────────────────
    SECTION 5 — MARQUEE
 ───────────────────────────────────────────── */
-const MarqueeSection = ({ isActive }: { isActive: boolean }) => {
-  const rows = [
-    { text: "SELL · TRACK · CONTROL · ",      reverse: false, cls: "text-[11vw] md:text-[7vw] opacity-100" },
-    { text: "ANALYZE · OPTIMIZE · GROW · ",   reverse: true,  cls: "text-[11vw] md:text-[7vw] opacity-30"  },
-    { text: "SIMPLIFY · AUTOMATE · SCALE · ", reverse: false, cls: "text-[9vw] md:text-[5.5vw] opacity-15" },
-  ];
+/* ─────────────────────────────────────────────
+   SECTION 5 — GETTING STARTED (REDESIGNED)
+───────────────────────────────────────────── */
+const GetStartedStep = ({
+  step,
+  title,
+  description,
+  icon,
+  isActive,
+  index,
+  expanded,
+}: {
+  step: number;
+  title: string;
+  description: string;
+  icon: string;
+  isActive: boolean;
+  index: number;
+  expanded?: boolean;
+}) => {
+  const extendedDesc = expanded
+    ? description +
+      " Manage your invoice templates, choose between A4 or thermal printing, set up payment methods, and configure default tax rules all in one centralized location."
+    : description;
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-center overflow-hidden bg-background">
-      {/* Ambient orb */}
-      <motion.div
-        animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55vw] h-[55vw] violet-glow pointer-events-none"
-      />
-
-      <div className="relative z-10 flex justify-between items-start px-6 md:px-12 pt-10 micro-label text-muted-foreground">
-        <span>(05) — In flow</span>
-        <span className="hidden md:block">A constant rhythm</span>
-      </div>
-
-      <div className="relative z-10 px-6 md:px-12 mt-6 mb-4">
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          animate={isActive ? { opacity: 0.7, y: 0 } : { opacity: 0 }}
-          transition={{ duration: 1, ease: EASE }}
-          className="editorial-display text-[9vw] md:text-[4.5vw] leading-none text-[hsl(var(--accent))]"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
+      className="group"
+    >
+      <div className={`space-y-4 ${expanded ? "h-full" : ""}`}>
+        {/* Step circle */}
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/8 border border-[hsl(var(--accent))]/40 flex items-center justify-center backdrop-blur-sm overflow-hidden"
         >
-          {new Date().toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })}
-        </motion.span>
+          <motion.div
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-[hsl(var(--accent))]/0 via-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/0"
+          />
+          <span className="relative z-10 text-xl font-bold text-[hsl(var(--accent))]">{step}</span>
+        </motion.div>
+
+        {/* Content */}
+        <div className="space-y-2 flex-1">
+          <h3 className="text-lg md:text-xl font-bold text-foreground leading-tight">
+            {title}
+          </h3>
+          <p className={`text-sm text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-2"}`}>
+            {extendedDesc}
+          </p>
+        </div>
+
+        {/* Icon area */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.7, delay: index * 0.1 }}
+          className={`p-4 rounded-xl bg-gradient-to-br from-[hsl(var(--accent))]/12 to-[hsl(var(--accent))]/4 border border-[hsl(var(--accent))]/20 backdrop-blur-sm flex items-center justify-center text-[hsl(var(--accent))]/50 hover:text-[hsl(var(--accent))]/70 transition-colors ${
+            expanded ? "h-32" : "h-20"
+          }`}
+        >
+          <div className="text-6xl md:text-7xl opacity-40">{icon}</div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+const MarqueeSection = ({ isActive }: { isActive: boolean }) => {
+  const { language, setLanguage } = useContext(LanguageCtx);
+  const translation = translations[language];
+
+  const steps = translation.steps.map((step, index) => ({
+    step: index + 1,
+    title: step.title,
+    description: step.description,
+    icon: ["📥", "🔐", "⚙️", "📦", "💳"][index],
+  }));
+
+  return (
+    <div className="relative w-full h-full overflow-hidden bg-background flex flex-col">
+      {/* Background elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div
+          animate={{ scale: [1, 1.08, 1], opacity: [0.15, 0.35, 0.15] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/3 -left-1/4 w-[80vw] h-[80vh] bg-gradient-to-r from-[hsl(var(--accent))]/30 to-transparent rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ scale: [1.05, 1, 1.05], opacity: [0.1, 0.25, 0.1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+          className="absolute -bottom-1/4 right-0 w-[70vw] h-[70vh] bg-gradient-to-l from-[hsl(var(--accent))]/25 to-transparent rounded-full blur-3xl"
+        />
       </div>
 
-      <div className="relative z-10 mx-6 md:mx-12 h-px bg-gradient-to-r from-transparent via-[hsl(var(--accent))]/30 to-transparent mb-8" />
+      {/* Header with Language Selector */}
+      <div className="relative z-10 px-6 md:px-12 pt-20 md:pt-32 pb-12 md:pb-16 flex justify-between items-start">
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.7 }}
+          className="space-y-3 flex-1"
+        >
+          <p className="micro-label text-[hsl(var(--accent))]">{translation.getting_started_label}</p>
+          <h2 className="editorial-display text-[5.5vw] md:text-[2.8vw] leading-tight text-balance max-w-[20ch]">
+            {translation.getting_started_title}
+          </h2>
+          <p className="font-sans text-sm md:text-base text-muted-foreground max-w-[60ch] leading-relaxed">
+            {translation.getting_started_subtitle}
+          </p>
+        </motion.div>
 
-      <div className="relative z-10 space-y-5 md:space-y-8 py-4">
-        {rows.map((row, i) => (
-          <div
-            key={i}
-            className={`flex whitespace-nowrap ${
-              row.reverse ? "animate-marquee-reverse" : "animate-marquee"
-            } ${row.cls}`}
-          >
-            {Array.from({ length: 8 }).map((_, j) => (
-              <span
-                key={j}
-                className="editorial-display mx-6 text-foreground"
-              >
-                {row.text}
-              </span>
-            ))}
-          </div>
-        ))}
+        {/* Language Selector Top Right */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="relative z-20 ml-4 md:ml-8"
+        >
+          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+            <SelectTrigger className="w-28 md:w-32 h-10 text-sm border-[hsl(var(--accent))]/40 hover:border-[hsl(var(--accent))]/60 transition-colors">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="ar">العربية</SelectItem>
+              <SelectItem value="hi">हिंदी</SelectItem>
+            </SelectContent>
+          </Select>
+        </motion.div>
       </div>
 
-      <div className="relative z-10 flex justify-between items-end px-6 md:px-12 pb-10 mt-8 micro-label text-muted-foreground">
-        <span>Every decision, intentional.</span>
-        <span className="hidden md:block italic font-serif text-sm">— a quiet pulse</span>
+      {/* Steps Grid Layout - Improved */}
+      <div className="relative z-10 flex-1 px-6 md:px-12 py-10 md:py-16 pb-20 md:pb-32 overflow-y-auto flex items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-6 auto-rows-max lg:auto-rows-fr w-full max-w-7xl">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
+              className="group"
+            >
+              <div className="space-y-4 h-full flex flex-col">
+                {/* Step circle */}
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/8 border border-[hsl(var(--accent))]/40 flex items-center justify-center backdrop-blur-sm overflow-hidden shrink-0"
+                >
+                  <motion.div
+                    animate={{ scale: [1, 1.15, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[hsl(var(--accent))]/0 via-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/0"
+                  />
+                  <span className="relative z-10 text-2xl font-bold text-[hsl(var(--accent))]">{step.step}</span>
+                </motion.div>
+
+                {/* Content */}
+                <div className="space-y-2 flex-1">
+                  <h3 className="text-base md:text-lg font-bold text-foreground leading-tight">
+                    {step.title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed line-clamp-3 md:line-clamp-4">
+                    {step.description}
+                  </p>
+                </div>
+
+                {/* Icon area */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
+                  transition={{ duration: 0.7, delay: index * 0.1 }}
+                  className="p-4 rounded-xl bg-gradient-to-br from-[hsl(var(--accent))]/12 to-[hsl(var(--accent))]/4 border border-[hsl(var(--accent))]/20 backdrop-blur-sm flex items-center justify-center text-[hsl(var(--accent))]/50 hover:text-[hsl(var(--accent))]/70 transition-colors h-24"
+                >
+                  <div className="text-5xl opacity-40">{step.icon}</div>
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1615,6 +2371,7 @@ const FinalCTA = ({ isActive }: { isActive: boolean }) => {
 const FullPageScroll = () => {
   const [active, setActive] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [language, setLanguage] = useState<Language>("en");
   const transitioning = useRef(false);
   const lastTouch = useRef<number | null>(null);
 
@@ -1699,33 +2456,35 @@ const FullPageScroll = () => {
 
   return (
     <ScrollCtx.Provider value={{ active, total: TOTAL_SECTIONS, goTo }}>
-      <Cursor />
+      <LanguageCtx.Provider value={{ language, setLanguage }}>
+        <Cursor />
 
-      {/* ── Cinematic loader ── */}
-      <AnimatePresence>
-        {!loaded && (
-          <Loader key="loader" onComplete={() => setLoaded(true)} />
-        )}
-      </AnimatePresence>
+        {/* ── Cinematic loader ── */}
+        <AnimatePresence>
+          {!loaded && (
+            <Loader key="loader" onComplete={() => setLoaded(true)} />
+          )}
+        </AnimatePresence>
 
-      {/* ── Main page ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={loaded ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.6, ease: EASE }}
-      >
-        <Nav />
-        <SectionProgress />
-        <NavDots />
+        {/* ── Main page ── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={loaded ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          <Nav />
+          <SectionProgress />
+          <NavDots />
 
-        <div className="fixed inset-0 bg-background overflow-hidden pt-[52px]">
-          {sections.map((section, i) => (
-            <Section key={i} index={i}>
-              {section}
-            </Section>
-          ))}
-        </div>
-      </motion.div>
+          <div className="fixed inset-0 bg-background overflow-hidden pt-[52px]">
+            {sections.map((section, i) => (
+              <Section key={i} index={i}>
+                {section}
+              </Section>
+            ))}
+          </div>
+        </motion.div>
+      </LanguageCtx.Provider>
     </ScrollCtx.Provider>
   );
 };
