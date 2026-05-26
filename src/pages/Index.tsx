@@ -32,6 +32,10 @@ import {
   Check,
   Download,
   ArrowRight,
+  Lock,
+  Settings,
+  Package,
+  CreditCard,
 } from "lucide-react";
 import type { TargetAndTransition } from "framer-motion";
 import {
@@ -126,7 +130,7 @@ const translations: Record<Language, {
 }> = {
   en: {
     getting_started_label: "(05) — Getting Started",
-    getting_started_title: "From installation to first sale in 5 steps.",
+    getting_started_title: "From installation to first sale in 5 clear steps.",
     getting_started_subtitle: "Set up your POS system in just a few minutes and start accepting sales immediately.",
     steps: [
       {
@@ -153,7 +157,7 @@ const translations: Record<Language, {
   },
   ar: {
     getting_started_label: "(05) — ابدأ الآن",
-    getting_started_title: "من التثبيت إلى أول عملية بيع في 5 خطوات.",
+    getting_started_title: "من التثبيت إلى أول عملية بيع في 5 خطوات واضحة.",
     getting_started_subtitle: "قم بإعداد نظام نقاط البيع الخاص بك في دقائق قليلة وابدأ قبول المبيعات على الفور.",
     steps: [
       {
@@ -180,7 +184,7 @@ const translations: Record<Language, {
   },
   hi: {
     getting_started_label: "(05) — शुरुआत करें",
-    getting_started_title: "5 चरणों में स्थापना से पहली बिक्री तक।",
+    getting_started_title: "5 स्पष्ट चरणों में स्थापना से पहली बिक्री तक।",
     getting_started_subtitle: "अपने POS सिस्टम को कुछ ही मिनटों में सेट करें और तुरंत बिक्री स्वीकार करना शुरू करें।",
     steps: [
       {
@@ -1575,113 +1579,114 @@ const MarqueeSection = ({ isActive }: { isActive: boolean }) => {
   const { language, setLanguage } = useContext(LanguageCtx);
   const translation = translations[language];
 
+  const stepIcons = [
+    <Download className="h-9 w-9" />, 
+    <Lock className="h-9 w-9" />,
+    <Settings className="h-9 w-9" />,
+    <Package className="h-9 w-9" />,
+    <CreditCard className="h-9 w-9" />,
+  ];
+
   const steps = translation.steps.map((step, index) => ({
     step: index + 1,
     title: step.title,
     description: step.description,
-    icon: ["📥", "🔐", "⚙️", "📦", "💳"][index],
+    icon: stepIcons[index],
   }));
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-background flex flex-col">
-      {/* Background elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.15, 0.35, 0.15] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 -left-1/4 w-[80vw] h-[80vh] bg-gradient-to-r from-[hsl(var(--accent))]/30 to-transparent rounded-full blur-3xl"
+    <div className="relative w-full h-full overflow-hidden bg-background text-foreground">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="section-3d-grid-soft" />
+        <div
+          className="section-3d-dot"
+          style={{
+            left: "10%",
+            top: "20%",
+            width: "14rem",
+            height: "14rem",
+            background: "rgba(205,172,255,0.18)",
+          }}
         />
-        <motion.div
-          animate={{ scale: [1.05, 1, 1.05], opacity: [0.1, 0.25, 0.1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-          className="absolute -bottom-1/4 right-0 w-[70vw] h-[70vh] bg-gradient-to-l from-[hsl(var(--accent))]/25 to-transparent rounded-full blur-3xl"
+        <div
+          className="section-3d-dot"
+          style={{
+            left: "75%",
+            top: "18%",
+            width: "12rem",
+            height: "12rem",
+            background: "rgba(217,197,255,0.12)",
+          }}
+        />
+        <div
+          className="section-3d-dot"
+          style={{
+            left: "50%",
+            bottom: "8%",
+            width: "20rem",
+            height: "20rem",
+            background: "rgba(188,148,255,0.10)",
+          }}
         />
       </div>
 
-      {/* Header with Language Selector */}
-      <div className="relative z-10 px-6 md:px-12 pt-20 md:pt-32 pb-12 md:pb-16 flex justify-between items-start">
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
-          transition={{ duration: 0.7 }}
-          className="space-y-3 flex-1"
-        >
-          <p className="micro-label text-[hsl(var(--accent))]">{translation.getting_started_label}</p>
-          <h2 className="editorial-display text-[5.5vw] md:text-[2.8vw] leading-tight text-balance max-w-[20ch]">
-            {translation.getting_started_title}
-          </h2>
-          <p className="font-sans text-sm md:text-base text-muted-foreground max-w-[60ch] leading-relaxed">
-            {translation.getting_started_subtitle}
-          </p>
-        </motion.div>
+      <div className="relative z-10 flex flex-col min-h-full">
+        <div className="px-6 md:px-12 pt-20 md:pt-28 pb-8 lg:pb-10">
+          <motion.div
+            initial={{ opacity: 0, y: -18 }}
+            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="mx-auto max-w-5xl text-center"
+          >
+            <p className="micro-label text-[hsl(var(--accent))] tracking-[0.26em] uppercase text-[0.75rem]">
+              {translation.getting_started_label}
+            </p>
+            <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight text-[hsl(var(--foreground))]">
+              {translation.getting_started_title}
+            </h2>
+            <p className="mt-4 mx-auto max-w-3xl text-sm md:text-base text-muted-foreground leading-relaxed">
+              {translation.getting_started_subtitle}
+            </p>
+          </motion.div>
+        </div>
 
-        {/* Language Selector Top Right */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative z-20 ml-4 md:ml-8"
-        >
-          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-            <SelectTrigger className="w-28 md:w-32 h-10 text-sm border-[hsl(var(--accent))]/40 hover:border-[hsl(var(--accent))]/60 transition-colors">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="ar">العربية</SelectItem>
-              <SelectItem value="hi">हिंदी</SelectItem>
-            </SelectContent>
-          </Select>
-        </motion.div>
-      </div>
-
-      {/* Steps Grid Layout - Improved */}
-      <div className="relative z-10 flex-1 px-6 md:px-12 py-10 md:py-16 pb-20 md:pb-32 overflow-y-auto flex items-center justify-center">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-6 auto-rows-max lg:auto-rows-fr w-full max-w-7xl">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
-              className="group"
-            >
-              <div className="space-y-4 h-full flex flex-col">
-                {/* Step circle */}
+        <div className="relative z-10 px-6 md:px-12 pb-16 md:pb-20">
+          <div className="mx-auto max-w-8xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
+              {steps.map((step, index) => (
                 <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/8 border border-[hsl(var(--accent))]/40 flex items-center justify-center backdrop-blur-sm overflow-hidden shrink-0"
+                  key={step.step}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0 }}
+                  transition={{ duration: 0.65, delay: index * 0.08, ease: EASE }}
+                  className="group relative flex min-h-[26rem] flex-col overflow-hidden rounded-[2rem] border border-white/70 bg-white/95 shadow-[0_40px_90px_-48px_rgba(88,71,193,0.22)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_42px_100px_-45px_rgba(88,71,193,0.34)] dark:border-slate-700/70 dark:bg-slate-950/85 dark:shadow-[0_40px_100px_-45px_rgba(0,0,0,0.45)]"
                 >
-                  <motion.div
-                    animate={{ scale: [1, 1.15, 1] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[hsl(var(--accent))]/0 via-[hsl(var(--accent))]/25 to-[hsl(var(--accent))]/0"
-                  />
-                  <span className="relative z-10 text-2xl font-bold text-[hsl(var(--accent))]">{step.step}</span>
-                </motion.div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(168,94,255,0.18),transparent_45%)] opacity-80" />
+                  <div className="relative flex flex-1 flex-col p-8">
+                      <div className="flex h-24 items-center justify-center rounded-[2rem] bg-[hsl(var(--accent))]/10 p-5 text-[hsl(var(--accent))] shadow-[0_12px_30px_-18px_rgba(88,71,193,0.25)]">
+                      {step.icon}
+                    </div>
 
-                {/* Content */}
-                <div className="space-y-2 flex-1">
-                  <h3 className="text-base md:text-lg font-bold text-foreground leading-tight">
-                    {step.title}
-                  </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed line-clamp-3 md:line-clamp-4">
-                    {step.description}
-                  </p>
-                </div>
+                    <div className="mt-6 flex-1 space-y-4 text-center">
+                      <h3 className="text-lg md:text-xl font-semibold text-[hsl(var(--foreground))]">
+                        {step.title}
+                      </h3>
+                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
 
-                {/* Icon area */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
-                  transition={{ duration: 0.7, delay: index * 0.1 }}
-                  className="p-4 rounded-xl bg-gradient-to-br from-[hsl(var(--accent))]/12 to-[hsl(var(--accent))]/4 border border-[hsl(var(--accent))]/20 backdrop-blur-sm flex items-center justify-center text-[hsl(var(--accent))]/50 hover:text-[hsl(var(--accent))]/70 transition-colors h-24"
-                >
-                  <div className="text-5xl opacity-40">{step.icon}</div>
+                    <div className="mt-6 flex items-center justify-center">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--accent))]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[hsl(var(--accent))]">
+                        Step {step.step}
+                      </span>
+                    </div>
+                  </div>
                 </motion.div>
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
