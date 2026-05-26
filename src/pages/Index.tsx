@@ -2255,7 +2255,7 @@ const FinalCTA = ({ isActive }: { isActive: boolean }) => {
 
       {/* Footer */}
       <div className="absolute bottom-8 left-0 right-0 px-6 md:px-12 flex justify-between items-end micro-label opacity-25 text-[hsl(var(--background))]">
-        <span>VioletPos — © 2026</span>
+        <span>VioletPos — © {new Date().getFullYear()}</span>
         <span className="hidden md:block">Designed for those who decide.</span>
         <span>Edition Nº1</span>
       </div>
